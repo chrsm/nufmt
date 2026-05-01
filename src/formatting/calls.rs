@@ -942,7 +942,7 @@ impl<'a> Formatter<'a> {
             }
             if let Some(default) = &param.default_value {
                 self.write(" = ");
-                self.write(&default.to_expanded_string(" ", &nu_protocol::Config::default()));
+                self.write_default_value(default);
             }
         }
 
@@ -974,7 +974,7 @@ impl<'a> Formatter<'a> {
             }
             if let Some(default) = &flag.default_value {
                 self.write(" = ");
-                self.write(&default.to_expanded_string(" ", &nu_protocol::Config::default()));
+                self.write_default_value(default);
             }
         }
 
@@ -1105,6 +1105,21 @@ impl<'a> Formatter<'a> {
                 }
             }
             other => self.write(&other.to_string()),
+        }
+    }
+
+    fn write_default_value(&mut self, default: &nu_protocol::Value) {
+        use nu_protocol::Value;
+        match default {
+            Value::String { val, .. } => {
+                let escaped = val.replace('\\', "\\\\").replace('"', "\\\"");
+                self.write("\"");
+                self.write(&escaped);
+                self.write("\"");
+            }
+            other => {
+                self.write(&other.to_expanded_string(" ", &nu_protocol::Config::default()));
+            }
         }
     }
 }

@@ -347,6 +347,11 @@ fixture_tests!(
         ground_truth_inline_param_comment_issue77,
         idempotency_inline_param_comment_issue77
     ),
+    (
+        "string_default_values_preserved",
+        ground_truth_string_default_values_preserved,
+        idempotency_string_default_values_preserved
+    ),
 );
 
 // Ground-truth-only tests (no idempotency pair)
